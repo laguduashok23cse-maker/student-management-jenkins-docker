@@ -14,17 +14,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+
   app:
     build: .
     container_name: student-app
     ports:
-      - "8080:8080"
+      - "8082:8080"
     environment:
+      SERVER_PORT: "8080"
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/studentdb
       SPRING_DATASOURCE_USERNAME: student
       SPRING_DATASOURCE_PASSWORD: student123
     depends_on:
       mysql:
         condition: service_healthy
+
 volumes:
   mysql_data:
