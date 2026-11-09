@@ -8,26 +8,27 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build and Test') {
             steps {
-                sh 'mvn -B clean package'
+                sh 'mvn -B clean verify'
             }
         }
 
-        stage('Test') {
+        stage('Build Docker Image and Deploy') {
             steps {
-                sh 'mvn test'
+                sh 'docker compose -p student-management-jenkins-docker up -d --build'
             }
         }
     }
 
     post {
         success {
-            echo 'Student Management Build Successful!'
+            echo 'Student Management System deployed successfully!'
+            echo 'Application URL: http://localhost:8082'
         }
 
         failure {
-            echo 'Build Failed!'
+            echo 'Pipeline failed. Check the console output.'
         }
     }
-}
+}      
